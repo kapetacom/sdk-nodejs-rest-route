@@ -1,0 +1,22 @@
+{
+  "name": "@blockware/sdk-rest-route",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blockwarecom/sdk-nodejs-rest-route.git"
+  },
+  "keywords": [
+    "blockware"
+  ],
+  "author": "Henrik Hofmeister <hh@blockware.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/blockwarecom/sdk-nodejs-rest-route/issues"
+  },
+  "homepage": "https://github.com/blockwarecom/sdk-nodejs-rest-route#readme",
+  "dependencies": {
+    "express": "4.17.1"
+  }
+}
