@@ -1,4 +1,6 @@
 const express = require('express');
+const _ = require('lodash');
+const bodyParser = require('body-parser');
 
 class RestRoute {
 
@@ -80,9 +82,24 @@ class RestRoute {
 
             console.log('REST: Adding endpoint %s %s', method.toUpperCase(), path);
 
+            let hasBody = false;
+            const endpointArguments = endpoint.arguments;
+
+            endpointArguments.forEach((arg) => {
+                if (arg.transport === 'body') {
+                    hasBody = true;
+                }
+            });
+
+            if (hasBody) {
+                //Currently we only support JSON. Add more body types here (e.g. file stream)
+                router.use(path, bodyParser.json());
+            }
+
             router[method](path, async (req, res) => {
                 try {
-                    const parsedArguments = this._parseArguments(req, endpoint.arguments);
+
+                    const parsedArguments = this._parseArguments(req, endpointArguments);
 
                     const responseBody = await endpoint.handler.apply(null, parsedArguments);
 
@@ -96,6 +113,7 @@ class RestRoute {
                     if (err.statusCode) {
                         res.status(err.statusCode).send(err.response);
                     } else {
+                        console.log('%s %s failed with error: ', method, path, err.stack);
                         res.status(500).send({
                             error: '' + err
                         });
