@@ -110,10 +110,14 @@ class RestRoute {
                     }
 
                 } catch(err) {
+                    if (!err.statusCode && err.response) {
+                        err = err.response;
+                    }
+
                     if (err.statusCode) {
-                        res.status(err.statusCode).send(err.response);
+                        res.status(err.statusCode).send(err.response ? err.response : err.body);
                     } else {
-                        console.log('%s %s failed with error: ', method, path, err.stack);
+                        console.log('%s %s failed with error: ', method, path, err && err.stack ? err.stack : err);
                         res.status(500).send({
                             error: '' + err
                         });
