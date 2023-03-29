@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/blockwarecom/sdk-nodejs-rest-route.git"
+    "url": "git+https://github.com/kapetacom/sdk-nodejs-rest-route.git"
   },
   "keywords": [
     "kapeta"
@@ -17,9 +17,9 @@
   "author": "Henrik Hofmeister <hh@kapeta.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/blockwarecom/sdk-nodejs-rest-route/issues"
+    "url": "https://github.com/kapetacom/sdk-nodejs-rest-route/issues"
   },
-  "homepage": "https://github.com/blockwarecom/sdk-nodejs-rest-route#readme",
+  "homepage": "https://github.com/kapetacom/sdk-nodejs-rest-route#readme",
   "dependencies": {
     "body-parser": "1.19.0",
     "express": "4.17.1",
