@@ -9,6 +9,7 @@ export interface RouteEndpointArgument {
 export interface RouteEndpoint {
     method: string;
     path: string;
+    description?: string;
     arguments: RouteEndpointArgument[];
     handler: (...args: any[]) => any;
 }
