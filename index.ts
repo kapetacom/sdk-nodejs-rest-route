@@ -1,36 +1,47 @@
-const express = require('express');
-const _ = require('lodash');
-const bodyParser = require('body-parser');
+import express, { Request, Response } from 'express';
+import bodyParser from 'body-parser';
 
-class RestRoute {
+export interface RouteEndpointArgument {
+    name: string;
+    transport: string;
+}
 
-    constructor() {
-        /**
-         *
-         * @type {RouteEndpoint[]}
-         * @private
-         */
-        this._endpoints = [];
-    }
+export interface RouteEndpoint {
+    method: string;
+    path: string;
+    arguments: RouteEndpointArgument[];
+    handler: (...args: any[]) => any;
+}
+
+export class RestRoute {
+    private _endpoints: RouteEndpoint[] = [];
 
     /**
      * Validates method against specs
-     * @param {Function} method
-     * @param {string} methodName
-     * @param {string[]} argumentNames
-     * @throws Error if not valid
-     * @return void
      */
-    validateMethod(method, methodName, argumentNames) {
+    validateMethod(method: Function, methodName: string, argumentNames: string[]) {
+        if (typeof method !== 'function') {
+            throw new Error('Invalid method: ' + methodName);
+        }
 
+        const methodDefinition = method.toString();
+
+        if (methodName !== method.name) {
+            throw new Error('Unexpected method name: ' + method.name + '. Expected: ' + methodName);
+        }
+
+        if (method.length !== argumentNames.length) {
+            throw new Error('Unexpected number of arguments: ' + method.length + '. Expected: ' + argumentNames.length);
+        }
+
+        //TODO: Validate argument names
     }
-
 
     /**
      * Adds endpoint to route
      * @param {RouteEndpoint} endpoint
      */
-    addEndpoint(endpoint) {
+    addEndpoint(endpoint: RouteEndpoint) {
         this._endpoints.push(endpoint);
     }
 
@@ -41,8 +52,8 @@ class RestRoute {
      * @return {any[]}
      * @private
      */
-    _parseArguments(req, endpointArguments) {
-        return endpointArguments.map(argument => {
+    _parseArguments(req: Request, endpointArguments: RouteEndpointArgument[]) {
+        return endpointArguments.map((argument) => {
             switch (argument.transport.toLowerCase()) {
                 case 'path':
                     return req.params[argument.name];
@@ -64,18 +75,17 @@ class RestRoute {
      * @return {*}
      * @private
      */
-    _convertPathToExpress(path) {
-        return path.replace(/\{([^\}]+)\}/g, ':$1');
+    _convertPathToExpress(path: string) {
+        return path.replace(/\{([^}]+)}/g, ':$1');
     }
 
     /**
      * Returns expressjs Router object with all endpoints
      */
     toExpressRoute() {
-        const router = new express.Router();
+        const router = express.Router();
 
         this._endpoints.forEach((endpoint) => {
-
             const method = endpoint.method.toLowerCase();
 
             const path = this._convertPathToExpress(endpoint.path);
@@ -96,9 +106,9 @@ class RestRoute {
                 router.use(path, bodyParser.json());
             }
 
-            router[method](path, async (req, res) => {
+            // @ts-ignore
+            router[method](path, async (req: Request, res: Response) => {
                 try {
-
                     const parsedArguments = this._parseArguments(req, endpointArguments);
 
                     const responseBody = await endpoint.handler.apply(null, parsedArguments);
@@ -108,8 +118,7 @@ class RestRoute {
                     } else {
                         res.status(201).send('');
                     }
-
-                } catch(err) {
+                } catch (err: any) {
                     if (!err.statusCode && err.response) {
                         err = err.response;
                     }
@@ -119,7 +128,7 @@ class RestRoute {
                     } else {
                         console.log('%s %s failed with error: ', method, path, err && err.stack ? err.stack : err);
                         res.status(500).send({
-                            error: '' + err
+                            error: '' + err,
                         });
                     }
                 }
@@ -129,6 +138,3 @@ class RestRoute {
         return router;
     }
 }
-
-
-module.exports = RestRoute;
