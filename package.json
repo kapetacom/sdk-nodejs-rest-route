@@ -1,6 +1,6 @@
 {
     "name": "@kapeta/sdk-rest-route",
-    "version": "0.0.14",
+    "version": "1.0.0",
     "description": "REST route for Kapeta SDK",
     "type": "module",
     "exports": {
