@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/kapetacom/sdk-nodejs-rest-route/compare/v1.0.1...v1.0.2) (2023-06-09)
+
+
+### Bug Fixes
+
+* Support mixed modules ([20a4dc2](https://github.com/kapetacom/sdk-nodejs-rest-route/commit/20a4dc2f174c38223fdaf016a8e30ef4a42c07fe))
+
 ## [1.0.1](https://github.com/kapetacom/sdk-nodejs-rest-route/compare/v1.0.0...v1.0.1) (2023-06-09)
 
 
