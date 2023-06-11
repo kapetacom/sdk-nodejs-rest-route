@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/kapetacom/sdk-nodejs-rest-route/compare/v1.0.4...v1.0.5) (2023-06-11)
+
+
+### Bug Fixes
+
+* Default to commonjs ([7812761](https://github.com/kapetacom/sdk-nodejs-rest-route/commit/7812761c4d893bfd780bf897819b114a3b70aec5))
+
 ## [1.0.4](https://github.com/kapetacom/sdk-nodejs-rest-route/compare/v1.0.3...v1.0.4) (2023-06-11)
 
 
