@@ -97,7 +97,7 @@ export class RestRoute {
             const endpointArguments = endpoint.arguments;
 
             endpointArguments.forEach((arg) => {
-                if (arg.transport === 'body') {
+                if (arg.transport?.toLowerCase() === 'body') {
                     hasBody = true;
                 }
             });
