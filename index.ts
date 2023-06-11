@@ -14,6 +14,17 @@ export interface RouteEndpoint {
     handler: (...args: any[]) => any;
 }
 
+/**
+ * Use this exception to return error to client with specific status code
+ */
+export class RESTError extends Error {
+    public statusCode: number;
+    constructor(message: string, statusCode: number = 400) {
+        super(message);
+        this.statusCode = statusCode;
+    }
+}
+
 export class RestRoute {
     private _endpoints: RouteEndpoint[] = [];
 
@@ -117,7 +128,7 @@ export class RestRoute {
                     if (responseBody) {
                         res.send(responseBody);
                     } else {
-                        res.status(201).send('');
+                        res.status(200).send('');
                     }
                 } catch (err: any) {
                     if (!err.statusCode && err.response) {
@@ -125,7 +136,7 @@ export class RestRoute {
                     }
 
                     if (err.statusCode) {
-                        res.status(err.statusCode).send(err.response ? err.response : err.body);
+                        res.status(err.statusCode).send(err.response ? err.response : {error: err.message});
                     } else {
                         console.log('%s %s failed with error: ', method, path, err && err.stack ? err.stack : err);
                         res.status(500).send({
