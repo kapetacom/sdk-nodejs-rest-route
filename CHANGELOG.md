@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/kapetacom/sdk-nodejs-rest-route/compare/v1.0.3...v1.0.4) (2023-06-11)
+
+
+### Bug Fixes
+
+* Improve error handling ([f42ae23](https://github.com/kapetacom/sdk-nodejs-rest-route/commit/f42ae237cfe8beaac89fd49e98b06099f72faaae))
+
 ## [1.0.3](https://github.com/kapetacom/sdk-nodejs-rest-route/compare/v1.0.2...v1.0.3) (2023-06-11)
 
 
