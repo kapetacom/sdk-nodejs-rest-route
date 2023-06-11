@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/kapetacom/sdk-nodejs-rest-route/compare/v1.0.2...v1.0.3) (2023-06-11)
+
+
+### Bug Fixes
+
+* Ignore casing for transport types ([9d77dff](https://github.com/kapetacom/sdk-nodejs-rest-route/commit/9d77dffc0cfdab89f150d46bdfc3a5eefc5b00f8))
+
 ## [1.0.2](https://github.com/kapetacom/sdk-nodejs-rest-route/compare/v1.0.1...v1.0.2) (2023-06-09)
 
 
