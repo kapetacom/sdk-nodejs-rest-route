@@ -131,12 +131,9 @@ export class RestRoute {
                         res.status(200).send('');
                     }
                 } catch (err: any) {
-                    if (!err.statusCode && err.response) {
-                        err = err.response;
-                    }
-
                     if (err.statusCode) {
-                        res.status(err.statusCode).send(err.response ? err.response : {error: err.message});
+                        //Known REST error type
+                        res.status(err.statusCode).send(err.message ? {error: err.message} : {error: 'Unknown error'});
                     } else {
                         console.log('%s %s failed with error: ', method, path, err && err.stack ? err.stack : err);
                         res.status(500).send({
