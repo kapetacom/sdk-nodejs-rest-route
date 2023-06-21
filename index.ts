@@ -126,9 +126,10 @@ export class RestRoute {
                     const responseBody = await endpoint.handler.apply(null, parsedArguments);
 
                     if (responseBody) {
+                        res.set('Content-Type', 'application/json');
                         res.send(responseBody);
                     } else {
-                        res.status(200).send('');
+                        res.status(204).send('');
                     }
                 } catch (err: any) {
                     if (err.statusCode) {
