@@ -1,3 +1,10 @@
+## [1.0.7](https://github.com/kapetacom/sdk-nodejs-rest-route/compare/v1.0.6...v1.0.7) (2023-06-21)
+
+
+### Bug Fixes
+
+* Send 204 when no content is available and add content type ([4806b52](https://github.com/kapetacom/sdk-nodejs-rest-route/commit/4806b52ff13a044bac6e33b6475b664a09226b18))
+
 ## [1.0.6](https://github.com/kapetacom/sdk-nodejs-rest-route/compare/v1.0.5...v1.0.6) (2023-06-18)
 
 
