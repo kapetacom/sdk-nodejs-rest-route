@@ -1,3 +1,10 @@
+## [1.0.8](https://github.com/kapetacom/sdk-nodejs-rest-route/compare/v1.0.7...v1.0.8) (2023-10-18)
+
+
+### Bug Fixes
+
+* Change dates to numbers when serializing ([#2](https://github.com/kapetacom/sdk-nodejs-rest-route/issues/2)) ([b4316fa](https://github.com/kapetacom/sdk-nodejs-rest-route/commit/b4316fada16506166a496c44004d0eeab03620c9))
+
 ## [1.0.7](https://github.com/kapetacom/sdk-nodejs-rest-route/compare/v1.0.6...v1.0.7) (2023-06-21)
 
 
