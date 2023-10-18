@@ -25,6 +25,14 @@ export class RESTError extends Error {
     }
 }
 
+//We want dates as numbers
+const JSONStringifyReplacer = function(this:any, key:string, value:any) {
+    if (this[key] instanceof Date) {
+        return this[key].getTime();
+    }
+    return value;
+}
+
 export class RestRoute {
     private _endpoints: RouteEndpoint[] = [];
 
@@ -126,18 +134,22 @@ export class RestRoute {
                     const responseBody = await endpoint.handler.apply(null, parsedArguments);
 
                     if (responseBody) {
-                        res.set('Content-Type', 'application/json');
-                        res.send(responseBody);
+                        res.setHeader('Content-Type', 'application/json');
+                        res.end(JSON.stringify(responseBody, JSONStringifyReplacer));
                     } else {
                         res.status(204).send('');
                     }
                 } catch (err: any) {
                     if (err.statusCode) {
                         //Known REST error type
-                        res.status(err.statusCode).send(err.message ? {error: err.message} : {error: 'Unknown error'});
+                        res.status(err.statusCode).json(
+                            err.message
+                            ? {error: err.message}
+                            : {error: 'Unknown error'}
+                        );
                     } else {
                         console.log('%s %s failed with error: ', method, path, err && err.stack ? err.stack : err);
-                        res.status(500).send({
+                        res.status(500).json({
                             error: '' + err,
                         });
                     }
