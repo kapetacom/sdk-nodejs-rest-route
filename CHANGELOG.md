@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/kapetacom/sdk-nodejs-rest-route/compare/v1.0.8...v1.1.0) (2023-11-07)
+
+
+### Features
+
+* Adding argument name to RouteEndpointArgument ([d94bdef](https://github.com/kapetacom/sdk-nodejs-rest-route/commit/d94bdefded8be8e93203d113ad207c50011fbc04))
+
 ## [1.0.8](https://github.com/kapetacom/sdk-nodejs-rest-route/compare/v1.0.7...v1.0.8) (2023-10-18)
 
 
