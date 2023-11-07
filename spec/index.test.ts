@@ -57,8 +57,9 @@ describe('_parseArguments', () => {
   it('should parse header arguments correctly', () => {
     const endpointArguments = [
       {
-        name: 'X-Kapeta-Tags',
+        name: 'kapetaTags',
         transport: 'header',
+        argument: 'X-Kapeta-Tags',
       },
     ];
 

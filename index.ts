@@ -6,11 +6,28 @@
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 
+/**
+ * Endpoint argument definition, defines a argument value to a request, like a path, query, header or body parameter
+ * @typedef {Object} RouteEndpointArgument
+ * @property {string} name - name of the argument
+ * @property {string} transport - path, query, header, body
+ * @property {string} [argument] - in case of header transport, this is the header name like X-Kapeta-Tags
+ */
 export interface RouteEndpointArgument {
     name: string;
     transport: string;
+    argument?: string;
 }
 
+/**
+ * Endpoint definition
+ * @typedef {Object} RouteEndpoint
+ * @property {string} method - GET, POST, PUT, DELETE etc.
+ * @property {string} path - /some/path/{id}/{type}
+ * @property {string} [description]
+ * @property {RouteEndpointArgument[]} arguments
+ * @property {function} handler
+ */
 export interface RouteEndpoint {
     method: string;
     path: string;
@@ -43,6 +60,10 @@ export class RestRoute {
 
     /**
      * Validates method against specs
+     * @param {function} method
+     * @param {string} methodName
+     * @param {string[]} argumentNames
+     * @throws {Error}
      */
     validateMethod(method: Function, methodName: string, argumentNames: string[]) {
         if (typeof method !== 'function') {
@@ -85,7 +106,7 @@ export class RestRoute {
                 case 'query':
                     return req.query[argument.name];
                 case 'header':
-                    return req.headers[argument.name.toLowerCase()];
+                    return req.headers[argument.argument?.toLowerCase() || ""];
                 case 'body':
                     return req.body;
                 default:
@@ -97,7 +118,7 @@ export class RestRoute {
     /**
      * Converts paths from /some/path/{id}/{type} to /some/path/:id/:type
      * @param path
-     * @return {*}
+     * @return {string}
      * @private
      */
     _convertPathToExpress(path: string) {
