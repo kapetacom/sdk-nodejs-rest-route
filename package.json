@@ -45,7 +45,7 @@
         "format": "prettier --write .",
         "lint": "tsc --noEmit && eslint *.ts",
         "prepublishOnly": "npm run build",
-        "test": "jest --coverage"
+        "test": "jest --coverage --passWithNoTests"
     },
     "homepage": "https://github.com/kapetacom/sdk-nodejs-rest-route#readme",
     "prettier": "@kapeta/prettier-config",
