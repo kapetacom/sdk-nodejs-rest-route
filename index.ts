@@ -3,37 +3,15 @@
  * SPDX-License-Identifier: MIT
  */
 
-import express, { Request, Response } from 'express';
-import bodyParser from 'body-parser';
+import {NextFunction, Request, RequestHandler, Response} from "express";
 
-/**
- * Endpoint argument definition, defines a argument value to a request, like a path, query, header or body parameter
- * @typedef {Object} RouteEndpointArgument
- * @property {string} name - name of the argument
- * @property {string} transport - path, query, header, body
- * @property {string} [argument] - in case of header transport, this is the header name like X-Kapeta-Tags
- */
-export interface RouteEndpointArgument {
-    name: string;
-    transport: string;
-    argument?: string;
-}
 
-/**
- * Endpoint definition
- * @typedef {Object} RouteEndpoint
- * @property {string} method - GET, POST, PUT, DELETE etc.
- * @property {string} path - /some/path/{id}/{type}
- * @property {string} [description]
- * @property {RouteEndpointArgument[]} arguments
- * @property {function} handler
- */
-export interface RouteEndpoint {
-    method: string;
-    path: string;
-    description?: string;
-    arguments: RouteEndpointArgument[];
-    handler: (...args: any[]) => any;
+declare global {
+    export namespace Express {
+        export interface Response {
+            sendError(err:RESTError|Error|string|any, statusCode?:number):void
+        }
+    }
 }
 
 /**
@@ -41,148 +19,20 @@ export interface RouteEndpoint {
  */
 export class RESTError extends Error {
     public statusCode: number;
+
     constructor(message: string, statusCode: number = 400) {
         super(message);
         this.statusCode = statusCode;
     }
 }
 
-//We want dates as numbers
-const JSONStringifyReplacer = function(this:any, key:string, value:any) {
-    if (this[key] instanceof Date) {
-        return this[key].getTime();
-    }
-    return value;
-}
 
-export class RestRoute {
-    private _endpoints: RouteEndpoint[] = [];
-
-    /**
-     * Validates method against specs
-     * @param {function} method
-     * @param {string} methodName
-     * @param {string[]} argumentNames
-     * @throws {Error}
-     */
-    validateMethod(method: Function, methodName: string, argumentNames: string[]) {
-        if (typeof method !== 'function') {
-            throw new Error('Invalid method: ' + methodName);
-        }
-
-        const methodDefinition = method.toString();
-
-        if (methodName !== method.name) {
-            throw new Error('Unexpected method name: ' + method.name + '. Expected: ' + methodName);
-        }
-
-        if (method.length !== argumentNames.length) {
-            throw new Error('Unexpected number of arguments: ' + method.length + '. Expected: ' + argumentNames.length);
-        }
-
-        //TODO: Validate argument names
+export const restAPIMiddleware:RequestHandler = (req:Request, res:Response, next:NextFunction) => {
+    res.sendError = (err:RESTError|Error|string|any, statusCode?:number) => {
+        const status = statusCode ?? err?.statusCode ?? 500;
+        const message = err?.message ?? err?.toString() ?? err?.name ?? 'Unknown error';
+        res.status(status).json({error: message});
     }
 
-    /**
-     * Adds endpoint to route
-     * @param {RouteEndpoint} endpoint
-     */
-    addEndpoint(endpoint: RouteEndpoint) {
-        this._endpoints.push(endpoint);
-    }
-
-    /**
-     *
-     * @param {request} req
-     * @param {RouteEndpointArgument[]} endpointArguments
-     * @return {any[]}
-     * @private
-     */
-    _parseArguments(req: Request, endpointArguments: RouteEndpointArgument[]) {
-        return endpointArguments.map((argument) => {
-            switch (argument.transport.toLowerCase()) {
-                case 'path':
-                    return req.params[argument.name];
-                case 'query':
-                    return req.query[argument.name];
-                case 'header':
-                    return req.headers[argument.argument?.toLowerCase() || ""];
-                case 'body':
-                    return req.body;
-                default:
-                    throw new Error('Invalid transport: ' + argument.transport);
-            }
-        });
-    }
-
-    /**
-     * Converts paths from /some/path/{id}/{type} to /some/path/:id/:type
-     * @param path
-     * @return {string}
-     * @private
-     */
-    _convertPathToExpress(path: string) {
-        return path.replace(/\{([^}]+)}/g, ':$1');
-    }
-
-    /**
-     * Returns expressjs Router object with all endpoints
-     */
-    toExpressRoute() {
-        const router = express.Router();
-
-        this._endpoints.forEach((endpoint) => {
-            const method = endpoint.method.toLowerCase();
-
-            const path = this._convertPathToExpress(endpoint.path);
-
-            console.log('REST: Adding endpoint %s %s', method.toUpperCase(), path);
-
-            let hasBody = false;
-            const endpointArguments = endpoint.arguments;
-
-            endpointArguments.forEach((arg) => {
-                if (arg.transport?.toLowerCase() === 'body') {
-                    hasBody = true;
-                }
-            });
-
-            if (hasBody) {
-                //Currently we only support JSON. Add more body types here (e.g. file stream)
-                router.use(path, bodyParser.json());
-            }
-
-            // @ts-ignore
-            router[method](path, async (req: Request, res: Response) => {
-                try {
-                    const parsedArguments = this._parseArguments(req, endpointArguments);
-
-                    const responseBody = await endpoint.handler.apply(null, parsedArguments);
-
-                    if (responseBody) {
-                        res.setHeader('Content-Type', 'application/json');
-                        res.end(JSON.stringify(responseBody, JSONStringifyReplacer));
-                    } else {
-                        res.status(204).send('');
-                    }
-                } catch (err: any) {
-                    if (err.statusCode) {
-                        //Known REST error type
-                        res.status(err.statusCode).json(
-                            err.message
-                            ? {error: err.message}
-                            : {error: 'Unknown error'}
-                        );
-                    } else {
-                        console.log('%s %s failed with error: ', method, path, err && err.stack ? err.stack : err);
-                        res.status(500).json({
-                            error: '' + err,
-                        });
-                    }
-                }
-            });
-        });
-
-        return router;
-    }
+    next();
 }
