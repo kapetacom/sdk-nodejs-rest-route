@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/kapetacom/sdk-nodejs-rest-route/compare/v1.1.0...v2.0.0) (2023-12-12)
+
+
+### Features
+
+* Simplify API and move express to peer ([#6](https://github.com/kapetacom/sdk-nodejs-rest-route/issues/6)) ([b26f081](https://github.com/kapetacom/sdk-nodejs-rest-route/commit/b26f0815842a7d1842adeb3c3cc206d851989e8e))
+
+
+### BREAKING CHANGES
+
+* Refactor to be more in line with how Express works
+
 # [1.1.0](https://github.com/kapetacom/sdk-nodejs-rest-route/compare/v1.0.8...v1.1.0) (2023-11-07)
 
 
