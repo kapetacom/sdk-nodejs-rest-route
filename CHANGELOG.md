@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/kapetacom/sdk-nodejs-rest-route/compare/v2.0.0...v2.0.1) (2023-12-13)
+
+
+### Bug Fixes
+
+* Adjust dependencies to match ^2 ([cdefcd5](https://github.com/kapetacom/sdk-nodejs-rest-route/commit/cdefcd5f49c20a511351f67b042718cefaf1b692))
+
 # [2.0.0](https://github.com/kapetacom/sdk-nodejs-rest-route/compare/v1.1.0...v2.0.0) (2023-12-12)
 
 
