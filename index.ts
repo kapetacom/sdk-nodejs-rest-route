@@ -26,7 +26,7 @@ export class RESTError extends Error {
     }
 }
 
-export const createRESTParameterParser = (requestArguments: RequestArgument[]): RequestHandler => {
+export const createRESTParameterParser = (requestArguments: Omit<RequestArgument,'value'>[]): RequestHandler => {
     return (req: Request, res: Response, next: NextFunction) => {
         requestArguments.forEach((arg) => {
             const transport = arg.transport.toUpperCase();
