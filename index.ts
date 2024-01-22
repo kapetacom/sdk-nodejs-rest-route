@@ -26,8 +26,10 @@ export class RESTError extends Error {
     }
 }
 
-export const createRESTParameterParser = (requestArguments: Omit<RequestArgument,'value'>[]): RequestHandler => {
-    return (req: Request, res: Response, next: NextFunction) => {
+export const createRESTParameterParser = <
+    RequestType = Request,
+    ResponseType = Response>(requestArguments: Omit<RequestArgument,'value'>[]) => {
+    return (req: RequestType, res: ResponseType, next: NextFunction) => {
         requestArguments.forEach((arg) => {
             const transport = arg.transport.toUpperCase();
             if (transport === 'QUERY' && arg.typeName === TYPE_PAGEABLE) {
