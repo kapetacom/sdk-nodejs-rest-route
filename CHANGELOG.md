@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/kapetacom/sdk-nodejs-rest-route/compare/v2.0.1...v2.1.0) (2024-01-22)
+
+
+### Features
+
+* Use rest handlers from shared lib ([#7](https://github.com/kapetacom/sdk-nodejs-rest-route/issues/7)) ([33abbe0](https://github.com/kapetacom/sdk-nodejs-rest-route/commit/33abbe0f31203b057412f2c4ab51402f664bdfa6))
+
 ## [2.0.1](https://github.com/kapetacom/sdk-nodejs-rest-route/compare/v2.0.0...v2.0.1) (2023-12-13)
 
 ### Bug Fixes
