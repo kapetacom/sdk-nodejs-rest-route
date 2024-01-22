@@ -79,6 +79,7 @@
         "testEnvironment": "node"
     },
     "dependencies": {
+        "@kapeta/sdk-rest": "^1.0.1",
         "body-parser": "1.19.0",
         "lodash": "4.17.11"
     },
@@ -86,8 +87,8 @@
         "@kapeta/eslint-config": "^0.6.0",
         "@kapeta/prettier-config": "^0.6.0",
         "@kapeta/sdk-config": "^2",
-        "@types/jest": "^29.5.7",
         "@types/express": "^4",
+        "@types/jest": "^29.5.7",
         "eslint": "^8.42.0",
         "eslint-config-prettier": "^8.8.0",
         "jest": "^29.7.0",

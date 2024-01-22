@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: MIT
  */
 
-import {NextFunction, Request, RequestHandler, Response} from "express";
-
+import { PageableHandler, RequestArgument, TYPE_PAGEABLE } from '@kapeta/sdk-rest';
+import { NextFunction, Request, RequestHandler, Response } from 'express';
 
 declare global {
     export namespace Express {
         export interface Response {
-            sendError(err:RESTError|Error|string|any, statusCode?:number):void
+            sendError(err: RESTError | Error | string | any, statusCode?: number): void;
         }
     }
 }
@@ -26,13 +26,29 @@ export class RESTError extends Error {
     }
 }
 
+export const createRESTParameterParser = <
+    RequestType = Request,
+    ResponseType = Response>(requestArguments: Omit<RequestArgument,'value'>[]) => {
+    return (req: RequestType, res: ResponseType, next: NextFunction) => {
+        requestArguments.forEach((arg) => {
+            const transport = arg.transport.toUpperCase();
+            if (transport === 'QUERY' && arg.typeName === TYPE_PAGEABLE) {
+                // Parse pageable from query params into Pageable
+                // @ts-ignore
+                req.query[arg.name] = PageableHandler.fromParsedQs(req.query);
+            }
+        });
 
-export const restAPIMiddleware:RequestHandler = (req:Request, res:Response, next:NextFunction) => {
-    res.sendError = (err:RESTError|Error|string|any, statusCode?:number) => {
+        next();
+    };
+};
+
+export const restAPIMiddleware: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
+    res.sendError = (err: RESTError | Error | string | any, statusCode?: number) => {
         const status = statusCode ?? err?.statusCode ?? 500;
         const message = err?.message ?? err?.toString() ?? err?.name ?? 'Unknown error';
-        res.status(status).json({error: message});
-    }
+        res.status(status).json({ error: message });
+    };
 
     next();
-}
+};
