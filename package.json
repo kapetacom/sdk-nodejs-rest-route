@@ -79,7 +79,7 @@
         "testEnvironment": "node"
     },
     "dependencies": {
-        "@kapeta/sdk-rest": "^1.0.0",
+        "@kapeta/sdk-rest": "^1.0.1",
         "body-parser": "1.19.0",
         "lodash": "4.17.11"
     },
